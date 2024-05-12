@@ -1,18 +1,22 @@
-import { canvas } from "./main";
-
-export const player = {
-    y: canvas.height - 100,
-    x: 50,
-    dx: 0,
-    friction: 0.9,
-    height: 50,
-    width: 50,
-};
-
-export type TPlayer = typeof player;
-
-export function updatePlayerX(player: TPlayer) {
-    player.dx *= player.friction;
-    player.x += player.dx;
+export class Player{
+    public x: number;
+    public y: number;
+    public dx: number;
+    public friction: number;
+    public height: number;
+    public width: number;
+    constructor(canvas: HTMLCanvasElement){
+        this.x = 50;
+        this.y = canvas.height - 100;
+        this.dx = 0;
+        this.friction = 0.9;
+        this.height = 50;
+        this.width = 50;
+    }
+    updatePlayerX(){
+        this.dx *= this.friction;
+        this.x += this.dx;
+    }
 }
+
 

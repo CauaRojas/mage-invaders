@@ -1,10 +1,12 @@
-import { player, updatePlayerX } from "./player";
+import { Player } from "./player";
 
 export const canvas = document.getElementById("game") as HTMLCanvasElement;
 const ctx = canvas.getContext("2d") || new CanvasRenderingContext2D();
 
 canvas.width = 800;
 canvas.height = 600;
+
+const player = new Player(canvas);
 
 document.addEventListener("keydown", (e) => {
     if (e.key === "ArrowRight") {
@@ -18,7 +20,7 @@ function main() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Apply friction and move player
-    updatePlayerX(player);
+    player.updatePlayerX()
 
     // Draw player
     ctx.fillStyle = "#FFBA00";
