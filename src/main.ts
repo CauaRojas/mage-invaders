@@ -14,6 +14,11 @@ document.addEventListener("keydown", (e) => {
     } else if (e.key === "ArrowLeft") {
         player.dx -= 1;
     }
+
+    if(e.key === " ") {
+        player.shoot();
+    }
+
 });
 
 function main() {
@@ -21,10 +26,17 @@ function main() {
 
     // Apply friction and move player
     player.updatePlayerX()
+    player.updateBulletsY();
 
     // Draw player
     ctx.fillStyle = "#FFBA00";
     ctx.fillRect(player.x, player.y, player.width, player.height);
+
+    // Draw bullets
+    ctx.fillStyle = "#FF0000";
+    player.bullets.forEach(bullet => {
+        ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
+    });
 
     requestAnimationFrame(main);
 }
