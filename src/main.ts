@@ -6,7 +6,16 @@ const ctx = canvas.getContext("2d") || new CanvasRenderingContext2D();
 canvas.width = 800;
 canvas.height = 600;
 
-const player = new Player(canvas);
+let player: Player;
+const createNewPlayer = (e: MouseEvent) => {
+    const button = e.target as HTMLButtonElement;
+    button.textContent = "Restart"
+    button.blur();
+    player = new Player(canvas);
+    main();
+
+};
+document.querySelector("button")?.addEventListener("click", createNewPlayer);
 
 document.addEventListener("keydown", (e) => {
     if (e.key === "ArrowRight") {
@@ -15,18 +24,23 @@ document.addEventListener("keydown", (e) => {
         player.dx -= 1;
     }
 
-    if(e.key === " ") {
+    if (e.key === " ") {
         player.shoot();
     }
-
 });
 
+let frame = 0;
+let timeBetweenEnemies = 120;
 function main() {
+    if (!player) {
+        return;
+    }
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Apply friction and move player
-    player.updatePlayerX()
+    player.updatePlayerX();
     player.updateBulletsY();
+    player.updateEnemiesY();
 
     // Draw player
     ctx.fillStyle = "#FFBA00";
@@ -34,14 +48,31 @@ function main() {
 
     // Draw bullets
     ctx.fillStyle = "#FF0000";
-    player.bullets.forEach(bullet => {
+    player.bullets.forEach((bullet) => {
         ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
     });
 
-    requestAnimationFrame(main);
+    // Draw enemies
+    ctx.fillStyle = "#4FFF00";
+    player.enemies.forEach((enemy) => {
+        ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
+    });
+    frame++;
+    if(frame % timeBetweenEnemies === 0) {
+        player.spawnEnemy();
+        timeBetweenEnemies -= 0.5;
+        if(timeBetweenEnemies < 80) {
+            timeBetweenEnemies = 80;
+        }
+    }
+
+    if (!player.gameover) {
+        requestAnimationFrame(main);
+    }
+    else{
+        ctx.fillStyle = "black";
+        ctx.font = "30px Arial";
+        ctx.fillText("Game Over", canvas.width / 2 - 100, canvas.height / 2);
+    }
 }
-
-requestAnimationFrame(main);
-
-
 
