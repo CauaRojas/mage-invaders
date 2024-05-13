@@ -33,6 +33,7 @@ const createNewPlayer = (e: MouseEvent) => {
             button.textContent = "Pause";
             main();
         }
+        button.blur();
     },
 );
 (document.querySelector(".end") as HTMLButtonElement).addEventListener(
